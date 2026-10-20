@@ -2,32 +2,32 @@
 #include <rtl/print.h>
 // slower functions, will optimize later on
 
-void* rtl_copy_mem(const void* src, void* dest, usize len){
-    const i8* srcInt = src;
-    i8* destInt = dest;
-    for(usize i = 0; i < len; i++){
+void* rtl_copy_mem(const void* src, void* dest, size_t len){
+    const int8_t* srcInt = src;
+    int8_t* destInt = dest;
+    for(size_t i = 0; i < len; i++){
         destInt[i] = srcInt[i];
     }
     return destInt;
 }
 
-void* rtl_set_mem(void* dest, u8 value, usize len){
-    u8* destInt = dest;
+void* rtl_set_mem(void* dest, uint8_t value, size_t len){
+    uint8_t* destInt = dest;
 
-    for(usize i = 0; i < len; i++){
+    for(size_t i = 0; i < len; i++){
         destInt[i] = value;
     }
     return destInt;
 }
 
-void rtl_zero_mem(void* dest, usize len){
+void rtl_zero_mem(void* dest, size_t len){
     rtl_set_mem(dest, 0, len);
 }
 
-isize rtl_compare_mem(const void* first, const void* second, usize len){
-    const i8* firstInt = first;
-    const i8* secondInt = second;
-    for(usize i = 0; i < len; i++){
+ssize_t rtl_compare_mem(const void* first, const void* second, size_t len){
+    const int8_t* firstInt = first;
+    const int8_t* secondInt = second;
+    for(size_t i = 0; i < len; i++){
         if(firstInt[i] != secondInt[i]){
             return firstInt[i] - secondInt[i];
         }
@@ -36,14 +36,14 @@ isize rtl_compare_mem(const void* first, const void* second, usize len){
 }
 
 
-u32 rtl_bswap32(u32 b){
+uint32_t rtl_bswap32(uint32_t b){
     return ((0xFF000000 & b) >> 24) |
         ((0x00FF0000 & b) >> 8) |
         ((0x0000FF00 & b) << 8) |
         ((0x000000FF & b) << 24);
 }
 
-u64 rtl_bswap64(u64 b){
+uint64_t rtl_bswap64(uint64_t b){
     return ((0xFF00000000000000UL & b) >> 56) |
         ((0x00FF000000000000UL & b) >> 40) |
         ((0x0000FF0000000000UL & b) >> 24) |
@@ -54,7 +54,7 @@ u64 rtl_bswap64(u64 b){
         ((0x00000000000000FFUL & b) << 56);
 }
 
-usize rtl_align_up(usize value, usize alignment){
+size_t rtl_align_up(size_t value, size_t alignment){
     return ((value + alignment - 1) / alignment) * alignment;
 }
 
@@ -62,14 +62,14 @@ usize rtl_align_up(usize value, usize alignment){
 // needed by most C compilers like clang
 // do NOT remove these, even if we aren't using it
 
-void* memcpy(void* dest, const void* src, usize num){
+void* memcpy(void* dest, const void* src, size_t num){
     return rtl_copy_mem(src, dest, num);
 }
 
-void* memset(void* dest, int value, usize len){
-    return rtl_set_mem(dest, (u8)value, len);
+void* memset(void* dest, int value, size_t len){
+    return rtl_set_mem(dest, (uint8_t)value, len);
 }
 
-int memcmp(const void* ptr1, const void* ptr2, usize len){
+int memcmp(const void* ptr1, const void* ptr2, size_t len){
     return rtl_compare_mem(ptr1, ptr2, len);
 }

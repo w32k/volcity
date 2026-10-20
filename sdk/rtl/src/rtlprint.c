@@ -5,7 +5,7 @@
 
 void rtl_print(const char* string);
 
-void rtl_print_dec(const char* prev, usize dec, boolean shouldNewline){
+void rtl_print_dec(const char* prev, size_t dec, bool shouldNewline){
     char buffer[20];
     rtl_dec_to_cstring(dec, buffer, 20);
     rtl_print(prev);
@@ -13,7 +13,7 @@ void rtl_print_dec(const char* prev, usize dec, boolean shouldNewline){
     if(shouldNewline) rtl_print("\n");
 }
 
-void rtl_print_hex(const char* prev, usize dec, boolean shouldNewline){
+void rtl_print_hex(const char* prev, size_t dec, bool shouldNewline){
     char buffer[20];
     rtl_hex_to_cstring(dec, buffer, 20);
     rtl_print(prev);
@@ -31,5 +31,3 @@ void rtl_printf(const char* format, ...){
     va_end(list);
     rtl_print(buffer);
 }
-
-

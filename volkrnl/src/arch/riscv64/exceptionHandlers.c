@@ -54,21 +54,21 @@ Callback syncCallbacks[] = {
 
 // this is a mess
 void exception_parser() {
-    u64 mepc = arch_get_mepc();
-    u64 mcause = arch_get_mcause();
+    uint64_t mepc = arch_get_mepc();
+    uint64_t mcause = arch_get_mcause();
     rtl_print_hex("mcause: ", mcause, TRUE);
     rtl_print_hex("mepc: ", mepc, TRUE);
 
     if(mcause & (1 << 31)){
         mcause &= ~(1 << 31);
         rtl_print_dec("parsed mcause: ", mcause, TRUE);
-        u32 asyncArrSize = sizeof(asyncCallbacks) / sizeof(asyncCallbacks[0]);
+        uint32_t asyncArrSize = sizeof(asyncCallbacks) / sizeof(asyncCallbacks[0]);
         if(mcause > asyncArrSize){
             kern_panic("invalid mcause returned at exception");
         }
         asyncCallbacks[mcause]();
     } else {
-        u32 syncArrSize = sizeof(syncCallbacks) / sizeof(syncCallbacks[0]);
+        uint32_t syncArrSize = sizeof(syncCallbacks) / sizeof(syncCallbacks[0]);
         rtl_print_dec("size: ", syncArrSize, TRUE);
         if(mcause > syncArrSize){
            // rtl_print("hm\n");
@@ -76,5 +76,3 @@ void exception_parser() {
         } else syncCallbacks[mcause]();
     }
 }
-
-

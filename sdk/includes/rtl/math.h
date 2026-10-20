@@ -10,7 +10,7 @@
 
 
 
-usize rtl_pow(usize base, usize exp);
+size_t rtl_pow(size_t base, size_t exp);
 
 
 

@@ -20,7 +20,7 @@ const char* memMapTypeToText[] = {
 
 // TODO: add spinlocks to make it SMP-safe
 
-static inline void add_page_to_freelist(uptr base){
+static inline void add_page_to_freelist(uintptr_t base){
     struct _PageFreeList* page = (struct _PageFreeList*)base;
     if(head == NULL){
         head = page;
@@ -51,15 +51,15 @@ static inline void* get_page_from_freelist(){
 
 void mem_dbg_print_memmap(){
     const char* style = "--------------------------------------------------------------------------------\n";
-    usize usableMemory = 0;
+    size_t usableMemory = 0;
     rtl_print("\n");
     rtl_print(style);
     rtl_print("dumping memory map\n");
     rtl_print(style);
-    for(usize i = 0; i < memMap->amount; i++){
+    for(size_t i = 0; i < memMap->amount; i++){
         MemoryEntry entry = memMap->entries[i];
         const char* memMapType;
-        if((usize)entry.type >= ARR_SIZE(memMapTypeToText)){
+        if((size_t)entry.type >= ARR_SIZE(memMapTypeToText)){
             memMapType = "unknown";
         } else {
             memMapType = memMapTypeToText[entry.type];
@@ -75,16 +75,16 @@ void mem_dbg_print_memmap(){
     rtl_print(style);
 }
 
-boolean mem_setup_pmm(MemoryMap* memoryMap){
+bool mem_setup_pmm(MemoryMap* memoryMap){
     memMap = memoryMap;
-    usize amountOfPages = 0;
+    size_t amountOfPages = 0;
 
     // this is really really slow with more and more amounts of memory
     // i need to do this in a smarter way
-    for(usize i = 0; i < memMap->amount; i++){
+    for(size_t i = 0; i < memMap->amount; i++){
         MemoryEntry* entry = &memMap->entries[i];
         if(entry->type != MEM_TYPE_FREE) continue;
-        for(usize i = 0; i < entry->size; i+=PAGE_SIZE){
+        for(size_t i = 0; i < entry->size; i+=PAGE_SIZE){
             // HACK: idk what to do with parts of memory that don't align with a page
             // its a waste of memory which is a shame, esp for more fragmented memory maps
             // but for now this will do!
@@ -101,7 +101,7 @@ void* mem_allocate_page(){
     return get_page_from_freelist();
 }
 
-boolean mem_free_page(void* address){
-    add_page_to_freelist((uptr)address);
+bool mem_free_page(void* address){
+    add_page_to_freelist((uintptr_t)address);
     return TRUE;
 }

@@ -21,25 +21,25 @@ typedef enum _MemoryType {
 } MemoryType;
 
 typedef struct _MemoryEntry {
-    uptr base;
-    uptr size;
+    uintptr_t base;
+    uintptr_t size;
     MemoryType type;
 } MemoryEntry;
 
 typedef struct _Arena {
-    uptr base;
-    uptr size;
+    uintptr_t base;
+    uintptr_t size;
 } Arena;
 
 typedef struct _MemoryMap {
     MemoryEntry* entries;
-    usize amount;
-    usize sizeOfMemory;
+    size_t amount;
+    size_t sizeOfMemory;
 } MemoryMap;
 
 void mem_dbg_print_memmap();
-boolean mem_setup_pmm(MemoryMap* memMap);
+bool mem_setup_pmm(MemoryMap* memMap);
 void* mem_allocate_page();
-boolean mem_free_page(void* address);
+bool mem_free_page(void* address);
 
 #endif

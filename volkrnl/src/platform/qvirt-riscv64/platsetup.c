@@ -14,66 +14,66 @@ static MemoryMap memMap = {0};
 static InitRdInfo initRdInfo = {0};
 
 
-extern uptr k_end;
+extern uintptr_t k_end;
 
-static inline boolean retrieve_memory_info(FdtInfo* info, uptr* base, usize* size){
-    u32 node = 0;
-    boolean result = fdt_find_node(info, "memory@80000000", &node);
+static inline bool retrieve_memory_info(FdtInfo* info, uintptr_t* base, size_t* size){
+    uint32_t node = 0;
+    bool result = fdt_find_node(info, "memory@80000000", &node);
     if(result == FALSE){
         DEBUG_FAIL("unable to locate memory node\n");
         return FALSE;
     }
-    u32 propOffset = 0;
+    uint32_t propOffset = 0;
     FdtProp* prop = fdt_get_prop_ex(info, node, "reg", &propOffset);
     if(prop == NULL){
         DEBUG_FAIL("unable to locate reg prop in memory node\n");
         return FALSE;
     }
 
-    uptr array[4] = {0};
+    uintptr_t array[4] = {0};
     fdt_get_array_from_prop(info, propOffset, array, 4);
 
-    *base = ((u64)array[0] << 32 | (u32)array[1]);
-    *size = ((u64)array[2] << 32 | (u32)array[3]);
+    *base = ((uint64_t)array[0] << 32 | (uint32_t)array[1]);
+    *size = ((uint64_t)array[2] << 32 | (uint32_t)array[3]);
     return TRUE;
 }
 
-static inline boolean retrieve_initrd_info(FdtInfo* info, uptr* base, usize* size){
-    u32 node = 0;
-    boolean result = fdt_find_node(info, "chosen", &node);
+static inline bool retrieve_initrd_info(FdtInfo* info, uintptr_t* base, size_t* size){
+    uint32_t node = 0;
+    bool result = fdt_find_node(info, "chosen", &node);
     if(result == FALSE){
         DEBUG_FAIL("unable to locate chosen node\n");
         return FALSE;
     }
-    u32 basePropOffset = 0;
+    uint32_t basePropOffset = 0;
     FdtProp* baseProp = fdt_get_prop_ex(info, node, "linux,initrd-start", &basePropOffset);
     if(baseProp == NULL){
         DEBUG_FAIL("unable to locate initrd-start prop in memory node\n");
         return FALSE;
     }
 
-    uptr baseArray[2] = {0};
+    uintptr_t baseArray[2] = {0};
     fdt_get_array_from_prop(info, basePropOffset, baseArray, 2);
-    uptr baseLoc = ((u64)baseArray[0] << 32 | (u32)baseArray[1]);
+    uintptr_t baseLoc = ((uint64_t)baseArray[0] << 32 | (uint32_t)baseArray[1]);
     *base = baseLoc;
 
-    u32 endPropOffset = 0;
+    uint32_t endPropOffset = 0;
     FdtProp* endProp = fdt_get_prop_ex(info, node, "linux,initrd-end", &endPropOffset);
     if(endProp == NULL){
         DEBUG_FAIL("unable to locate initrd-end prop in memory node\n");
         return FALSE;
     }
 
-    uptr endArray[2] = {0};
+    uintptr_t endArray[2] = {0};
     fdt_get_array_from_prop(info, endPropOffset, endArray, 2);
-    uptr endLoc = ((u64)endArray[0] << 32 | (u32)endArray[1]);
+    uintptr_t endLoc = ((uint64_t)endArray[0] << 32 | (uint32_t)endArray[1]);
     *size = endLoc - baseLoc;
     return TRUE;
 }
 
 
 
-void plat_setup(uptr dTreeBase, uptr kernelEndpoint){
+void plat_setup(uintptr_t dTreeBase, uintptr_t kernelEndpoint){
     plat_uart_setup();
     arch_setup();
     if(arch_get_stvec() == 0x0 && arch_get_mtvec() == 0x0){
@@ -82,21 +82,21 @@ void plat_setup(uptr dTreeBase, uptr kernelEndpoint){
     rtl_printf("mtvec: 0x%lx\n", arch_get_mtvec());
 
     FdtInfo info = {0};
-    boolean result = fdt_init(&info, dTreeBase);
+    bool result = fdt_init(&info, dTreeBase);
     if(result == FALSE){
         DEBUG_FAIL("invalid fdt! magic returned is 0x%x\n", info.header.magic);
         kern_panic("invalid fdt");
     }
 
-    uptr memBase = 0;
-    usize memSize = 0;
+    uintptr_t memBase = 0;
+    size_t memSize = 0;
     result = retrieve_memory_info(&info, &memBase, &memSize);
     if(result == FALSE){
         kern_panic("couldn't receive memory info from device tree");
     }
 
-    uptr initRdBase = 0;
-    usize initRdSize = 0;
+    uintptr_t initRdBase = 0;
+    size_t initRdSize = 0;
     result = retrieve_initrd_info(&info, &initRdBase, &initRdSize);
     if(result == FALSE){
         kern_panic("couldn't receive initrd info from device tree");
@@ -149,7 +149,7 @@ void plat_setup(uptr dTreeBase, uptr kernelEndpoint){
     memMap.amount = 7;
 
 
-    //*(u64*)(0x90290292) = 'h';
+    //*(uint64_t*)(0x90290292) = 'h';
 
     kern_entry(&memMap, &initRdInfo);
     kern_panic("kern_entry exited!");

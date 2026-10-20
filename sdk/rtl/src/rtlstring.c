@@ -3,8 +3,8 @@
 #include <rtl/math.h>
 #include <rtl/print.h>
 
-usize rtl_get_cstring_len(const char* src){
-    usize i = 0;
+size_t rtl_get_cstring_len(const char* src){
+    size_t i = 0;
     while(*src != '\0'){
         i++;
         src++;
@@ -13,8 +13,8 @@ usize rtl_get_cstring_len(const char* src){
 }
 
 // broken
-isize rtl_compare_cstring_ex(const char* first, const char* second, usize maxLength){
-    for(usize i = 0; i < maxLength; i++){
+ssize_t rtl_compare_cstring_ex(const char* first, const char* second, size_t maxLength){
+    for(size_t i = 0; i < maxLength; i++){
         if(first[i] != second[i]){
             return first[i] - second[i];
         }
@@ -23,20 +23,20 @@ isize rtl_compare_cstring_ex(const char* first, const char* second, usize maxLen
 }
 
 // broken
-isize rtl_compare_cstring(const char* first, const char* second){
-    usize firstSize = rtl_get_cstring_len(first);
-    usize secondSize = rtl_get_cstring_len(second);
+ssize_t rtl_compare_cstring(const char* first, const char* second){
+    size_t firstSize = rtl_get_cstring_len(first);
+    size_t secondSize = rtl_get_cstring_len(second);
     // bruh
     if(firstSize > secondSize){
-        return -1; 
+        return -1;
     } else if(firstSize < secondSize){
         return 1;
     }
     return rtl_compare_cstring_ex(first, second, firstSize);
 }
 
-boolean rtl_equal_cstring_ex(const char* first, const char* second, usize maxLength){
-    for(usize i = 0; i < maxLength; i++){
+bool rtl_equal_cstring_ex(const char* first, const char* second, size_t maxLength){
+    for(size_t i = 0; i < maxLength; i++){
         if(first[i] != second[i]){
             return FALSE;
         }
@@ -44,9 +44,9 @@ boolean rtl_equal_cstring_ex(const char* first, const char* second, usize maxLen
     return TRUE;
 }
 
-boolean rtl_equal_cstring(const char* first, const char* second){
-    usize firstSize = rtl_get_cstring_len(first);
-    usize secondSize = rtl_get_cstring_len(second);
+bool rtl_equal_cstring(const char* first, const char* second){
+    size_t firstSize = rtl_get_cstring_len(first);
+    size_t secondSize = rtl_get_cstring_len(second);
     if(firstSize != secondSize){
         return FALSE;
     }
@@ -55,33 +55,33 @@ boolean rtl_equal_cstring(const char* first, const char* second){
 
 
 
-void rtl_copy_cstring(const char* src, char* dest, usize len){
-    for(usize i = 0; i < len; i++){
+void rtl_copy_cstring(const char* src, char* dest, size_t len){
+    for(size_t i = 0; i < len; i++){
         dest[i] = src[i];
     }
 }
 
-usize rtl_cstring_to_dec_ex(const char* src, usize len, boolean shouldFail){
-    usize number = 0;
-    for(usize i = 0; i < len; i++){
+size_t rtl_cstring_to_dec_ex(const char* src, size_t len, bool shouldFail){
+    size_t number = 0;
+    for(size_t i = 0; i < len; i++){
         if(src[i] > '9' || src[i] < '0'){
             if(shouldFail) return number;
             else continue;
         }
-        u8 singleDigit = src[i] - '0';
+        uint8_t singleDigit = src[i] - '0';
         number += singleDigit;
         number *= 10;
     }
-    
-    return number / 10;
-} 
 
-usize rtl_cstring_to_dec(const char* src, usize len){
+    return number / 10;
+}
+
+size_t rtl_cstring_to_dec(const char* src, size_t len){
     return rtl_cstring_to_dec_ex(src, len, TRUE);
 }
 
 
-usize rtl_dec_to_cstring(const usize number, char* src, usize len){
+size_t rtl_dec_to_cstring(const size_t number, char* src, size_t len){
     if(number == 0){
         if(len >= 2){
             src[0] = '0';
@@ -89,21 +89,21 @@ usize rtl_dec_to_cstring(const usize number, char* src, usize len){
             return 1;
         } else return 0;
     }
-    usize digits = 0;
-    usize num = number;
-    while(num > 0){ 
+    size_t digits = 0;
+    size_t num = number;
+    while(num > 0){
         num /= 10;
         digits++;
     }
     num = number;
-    usize index = 0;
-    usize prevDigit = digits;
+    size_t index = 0;
+    size_t prevDigit = digits;
     for(index = 0; index < prevDigit; index++){
         if(index >= (len - 1)){
             break;
         }
-        usize amount = rtl_pow(10, digits - index);
-        u8 digit = num / amount;        
+        size_t amount = rtl_pow(10, digits - index);
+        uint8_t digit = num / amount;
         src[index] = digit + '0';
         num -= (amount * digit);
     }
@@ -115,26 +115,26 @@ usize rtl_dec_to_cstring(const usize number, char* src, usize len){
 }
 
 // broken
-usize rtl_cstring_to_bin_ex(const char* src, usize len, boolean shouldFail){
-    usize number = 0;
-    for(usize i = 0; i < len; i++){
+size_t rtl_cstring_to_bin_ex(const char* src, size_t len, bool shouldFail){
+    size_t number = 0;
+    for(size_t i = 0; i < len; i++){
         if(src[i] > '1' || src[i] < '0'){
             if(shouldFail) return number;
             else continue;
         }
-        u8 singleDigit = src[i] - '0';
+        uint8_t singleDigit = src[i] - '0';
         number += singleDigit;
         number *= 2;
     }
-    
-    return number / 2;
-} 
 
-usize rtl_cstring_to_bin(const char* src, usize len){
+    return number / 2;
+}
+
+size_t rtl_cstring_to_bin(const char* src, size_t len){
     return rtl_cstring_to_bin_ex(src, len, TRUE);
 }
 
-usize rtl_bin_to_cstring(const usize number, char* src, usize len){
+size_t rtl_bin_to_cstring(const size_t number, char* src, size_t len){
     if(number == 0){
         if(len >= 2){
             src[0] = '0';
@@ -142,21 +142,21 @@ usize rtl_bin_to_cstring(const usize number, char* src, usize len){
             return 1;
         } else return 0;
     }
-    usize digits = 0;
-    usize num = number;
-    while(num > 0){ 
+    size_t digits = 0;
+    size_t num = number;
+    while(num > 0){
         num /= 2;
         digits++;
     }
     num = number;
-    usize index = 0;
-    usize prevDigit = digits;
+    size_t index = 0;
+    size_t prevDigit = digits;
     for(index = 0; index < prevDigit; index++){
         if(index >= (len - 1)){
             break;
         }
-        usize amount = rtl_pow(2, digits - index);
-        u8 digit = num / amount;        
+        size_t amount = rtl_pow(2, digits - index);
+        uint8_t digit = num / amount;
         src[index] = digit + '0';
         num -= (amount * digit);
     }
@@ -167,7 +167,7 @@ usize rtl_bin_to_cstring(const usize number, char* src, usize len){
     return digits;
 }
 
-static inline boolean char_is_hex(char c){
+static inline bool char_is_hex(char c){
     if(c <= '9' && c >= '0'){
         return TRUE;
     } else if(c <= 'F' && c >= 'A'){
@@ -177,7 +177,7 @@ static inline boolean char_is_hex(char c){
     } else return FALSE;
 }
 
-static inline u8 char_to_hex(char c){
+static inline uint8_t char_to_hex(char c){
     switch(c){
         case 'a':
         case 'A':
@@ -202,7 +202,7 @@ static inline u8 char_to_hex(char c){
     }
 }
 
-static inline char hex_to_char(u8 h){
+static inline char hex_to_char(uint8_t h){
     switch(h){
         case 0xA:
             return 'A';
@@ -220,31 +220,31 @@ static inline char hex_to_char(u8 h){
             return '?';
     }
 }
- 
-usize rtl_cstring_to_hex_ex(const char* src, usize len, boolean shouldFail){
-    usize number = 0;
-    for(usize i = 0; i < len; i++){
+
+size_t rtl_cstring_to_hex_ex(const char* src, size_t len, bool shouldFail){
+    size_t number = 0;
+    for(size_t i = 0; i < len; i++){
         if(!char_is_hex(src[i])){
             if(shouldFail) return number;
             else continue;
         }
-        u8 singleDigit = 0;
+        uint8_t singleDigit = 0;
         if(src[i] <= '9' && src[i] >= '0'){
             singleDigit = src[i] - '0';
         } else singleDigit = char_to_hex(src[i]);
         number += singleDigit;
         number *= 16;
     }
-    
-    return number / 16;
-} 
 
-usize rtl_cstring_to_hex(const char* src, usize len){
+    return number / 16;
+}
+
+size_t rtl_cstring_to_hex(const char* src, size_t len){
     return rtl_cstring_to_hex_ex(src, len, TRUE);
 }
 
 
-usize rtl_hex_to_cstring(const usize number, char* src, usize len){
+size_t rtl_hex_to_cstring(const size_t number, char* src, size_t len){
     if(number == 0x0){
         if(len >= 2){
             src[0] = '0';
@@ -252,23 +252,23 @@ usize rtl_hex_to_cstring(const usize number, char* src, usize len){
             return 1;
         } else return 0;
     }
-    usize digits = 0;
-    usize num = number;
-    while(num > 0){ 
+    size_t digits = 0;
+    size_t num = number;
+    while(num > 0){
         num /= 16;
         digits++;
     }
     num = number;
-    usize index = 0;
-    usize prevDigit = digits;
+    size_t index = 0;
+    size_t prevDigit = digits;
     for(index = 0; index < prevDigit; index++){
         if(index >= (len - 1)){
             break;
         }
-        usize amount = rtl_pow(16, digits - index);
-        u8 digit = num / amount;    
+        size_t amount = rtl_pow(16, digits - index);
+        uint8_t digit = num / amount;
         if(digit <= 0x9 && digit >= 0x0){
-            src[index] = digit + '0'; 
+            src[index] = digit + '0';
         } else src[index] = hex_to_char(digit);
         num -= (amount * digit);
     }
@@ -280,8 +280,8 @@ usize rtl_hex_to_cstring(const usize number, char* src, usize len){
     return digits;
 }
 
-usize rtl_oct_string_to_usize(const unsigned char* octStr, usize len){
-    usize result = 0;
+size_t rtl_oct_string_to_size_t(const unsigned char* octStr, size_t len){
+    size_t result = 0;
     unsigned char* str = (unsigned char*)octStr;
     while(len > 0){
         len--;
@@ -291,4 +291,3 @@ usize rtl_oct_string_to_usize(const unsigned char* octStr, usize len){
     }
     return result;
 }
-

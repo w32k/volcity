@@ -2,11 +2,10 @@
 // very unoptimized =(
 
 
-usize rtl_pow(usize base, usize exp){
-    usize result = 1;
-    for(usize i = 0; i < (exp - 1); i++){
+size_t rtl_pow(size_t base, size_t exp){
+    size_t result = 1;
+    for(size_t i = 0; i < (exp - 1); i++){
         result *= base;
     }
     return result;
 }
-

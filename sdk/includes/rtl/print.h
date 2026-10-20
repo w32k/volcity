@@ -10,8 +10,8 @@
 
 
 void rtl_print(const char* string);
-void rtl_print_dec(const char* prev, usize dec, boolean shouldNewline);
-void rtl_print_hex(const char* prev, usize dec, boolean shouldNewline);
+void rtl_print_dec(const char* prev, size_t dec, bool shouldNewline);
+void rtl_print_hex(const char* prev, size_t dec, bool shouldNewline);
 void rtl_printf(const char* format, ...);
 
 #define DEBUG_FAIL(message, ...) rtl_printf("[FAIL] (%s:%d) " message, __FILE__, __LINE__, ##__VA_ARGS__)

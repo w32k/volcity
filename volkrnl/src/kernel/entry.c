@@ -8,7 +8,7 @@
 #include <rtl/mem.h>
 #include <platform/platform.h>
 
-void kern_entry(MemoryMap* memMap, InitRdInfo* rdInfo){
+void kern_entry(memorymap_t* memMap, initrdinfo_t* rdInfo){
     rtl_printf("\n\nVolcity Version INDEV (%s at %s)\n\n", __DATE__, __TIME__);
     DEBUG_INFO("setting up memory manager\n");
     bool result = mem_setup_pmm(memMap);

@@ -9,14 +9,14 @@
 #include <rtl/print.h>
 
 
-static MemoryEntry memEntries[256];
-static MemoryMap memMap = {0};
-static InitRdInfo initRdInfo = {0};
+static memoryentry_t memEntries[256];
+static memorymap_t memMap = {0};
+static initrdinfo_t initRdInfo = {0};
 
 
 extern uintptr_t k_end;
 
-static inline bool retrieve_memory_info(FdtInfo* info, uintptr_t* base, size_t* size){
+static inline bool retrieve_memory_info(fdtinfo_t* info, uintptr_t* base, size_t* size){
     uint32_t node = 0;
     bool result = fdt_find_node(info, "memory@80000000", &node);
     if(result == FALSE){
@@ -24,7 +24,7 @@ static inline bool retrieve_memory_info(FdtInfo* info, uintptr_t* base, size_t* 
         return FALSE;
     }
     uint32_t propOffset = 0;
-    FdtProp* prop = fdt_get_prop_ex(info, node, "reg", &propOffset);
+    fdtprop_t* prop = fdt_get_prop_ex(info, node, "reg", &propOffset);
     if(prop == NULL){
         DEBUG_FAIL("unable to locate reg prop in memory node\n");
         return FALSE;
@@ -38,7 +38,7 @@ static inline bool retrieve_memory_info(FdtInfo* info, uintptr_t* base, size_t* 
     return TRUE;
 }
 
-static inline bool retrieve_initrd_info(FdtInfo* info, uintptr_t* base, size_t* size){
+static inline bool retrieve_initrd_info(fdtinfo_t* info, uintptr_t* base, size_t* size){
     uint32_t node = 0;
     bool result = fdt_find_node(info, "chosen", &node);
     if(result == FALSE){
@@ -46,7 +46,7 @@ static inline bool retrieve_initrd_info(FdtInfo* info, uintptr_t* base, size_t* 
         return FALSE;
     }
     uint32_t basePropOffset = 0;
-    FdtProp* baseProp = fdt_get_prop_ex(info, node, "linux,initrd-start", &basePropOffset);
+    fdtprop_t* baseProp = fdt_get_prop_ex(info, node, "linux,initrd-start", &basePropOffset);
     if(baseProp == NULL){
         DEBUG_FAIL("unable to locate initrd-start prop in memory node\n");
         return FALSE;
@@ -58,7 +58,7 @@ static inline bool retrieve_initrd_info(FdtInfo* info, uintptr_t* base, size_t* 
     *base = baseLoc;
 
     uint32_t endPropOffset = 0;
-    FdtProp* endProp = fdt_get_prop_ex(info, node, "linux,initrd-end", &endPropOffset);
+    fdtprop_t* endProp = fdt_get_prop_ex(info, node, "linux,initrd-end", &endPropOffset);
     if(endProp == NULL){
         DEBUG_FAIL("unable to locate initrd-end prop in memory node\n");
         return FALSE;
@@ -81,7 +81,7 @@ void plat_setup(uintptr_t dTreeBase, uintptr_t kernelEndpoint){
     }
     rtl_printf("mtvec: 0x%lx\n", arch_get_mtvec());
 
-    FdtInfo info = {0};
+    fdtinfo_t info = {0};
     bool result = fdt_init(&info, dTreeBase);
     if(result == FALSE){
         DEBUG_FAIL("invalid fdt! magic returned is 0x%x\n", info.header.magic);

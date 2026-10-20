@@ -17,7 +17,7 @@
 #define FDT_NOP 0x00000004
 #define FDT_END 0x00000009
 
-typedef struct _FdtHeader {
+typedef struct _fdtheader {
     uint32_t magic;
     uint32_t totalSize;
     uint32_t dtStructOffset;
@@ -28,32 +28,32 @@ typedef struct _FdtHeader {
     uint32_t bootPhysCpuid;
     uint32_t dtStringSize;
     uint32_t dtStructSize;
-} FdtHeader;
+} fdtheader_t;
 
-typedef struct _FdtInfo {
-    FdtHeader header;
+typedef struct fdtinfo {
+    fdtheader_t header;
     uint32_t* cells;
     size_t cellAmount;
     uintptr_t fdtAddress;
-} FdtInfo;
+} fdtinfo_t;
 
-typedef struct _FdtProp {
+typedef struct fdtprop {
     uint32_t length;
     uint32_t nameOffset;
-} FdtProp;
+} fdtprop_t;
 
 
-bool fdt_init(FdtInfo* info, uintptr_t address);
-const char* fdt_get_string(FdtInfo* info, uint32_t offset);
-void fdt_print_all_strings(FdtInfo* info);
-void fdt_print_node(FdtInfo* info, uint32_t offset);
-void fdt_dump(FdtInfo* info);
-bool fdt_find_node(FdtInfo* info, const char* nodeName, uint32_t* offset);
-FdtProp* fdt_get_prop_ex(FdtInfo* info, uint32_t nodeOffset, const char* propName, uint32_t* propOffset);
-FdtProp* fdt_get_prop(FdtInfo* info, uint32_t nodeOffset, const char* propName);
-uint32_t fdt_get_value_from_prop(FdtInfo* info, uint32_t propOffset);
-void fdt_get_array_from_prop(FdtInfo* info, uint32_t propOffset, uintptr_t* array, size_t length);
-//const char* fdt_get_string_from_prop(FdtInfo* info, uint32_t propOffset);
+bool fdt_init(fdtinfo_t* info, uintptr_t address);
+const char* fdt_get_string(fdtinfo_t* info, uint32_t offset);
+void fdt_print_all_strings(fdtinfo_t* info);
+void fdt_print_node(fdtinfo_t* info, uint32_t offset);
+void fdt_dump(fdtinfo_t* info);
+bool fdt_find_node(fdtinfo_t* info, const char* nodeName, uint32_t* offset);
+fdtprop_t* fdt_get_prop_ex(fdtinfo_t* info, uint32_t nodeOffset, const char* propName, uint32_t* propOffset);
+fdtprop_t* fdt_get_prop(fdtinfo_t* info, uint32_t nodeOffset, const char* propName);
+uint32_t fdt_get_value_from_prop(fdtinfo_t* info, uint32_t propOffset);
+void fdt_get_array_from_prop(fdtinfo_t* info, uint32_t propOffset, uintptr_t* array, size_t length);
+//const char* fdt_get_string_from_prop(fdtinfo_t* info, uint32_t propOffset);
 
 
 

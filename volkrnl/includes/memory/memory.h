@@ -14,31 +14,31 @@
 // most 32bit systems, make sure the page size is 16 bytes or greater
 #define PAGE_SIZE 0x1000
 
-typedef enum _MemoryType {
+typedef enum memorytype {
     MEM_TYPE_USED,
     MEM_TYPE_FREE,
     MEM_TYPE_MMIO
-} MemoryType;
+} memorytype_t;
 
-typedef struct _MemoryEntry {
+typedef struct memoryentry {
     uintptr_t base;
     uintptr_t size;
-    MemoryType type;
-} MemoryEntry;
+    memorytype_t type;
+} memoryentry_t;
 
-typedef struct _Arena {
+typedef struct arena {
     uintptr_t base;
     uintptr_t size;
-} Arena;
+} arena_t;
 
-typedef struct _MemoryMap {
-    MemoryEntry* entries;
+typedef struct memorymap {
+    memoryentry_t* entries;
     size_t amount;
     size_t sizeOfMemory;
-} MemoryMap;
+} memorymap_t;
 
 void mem_dbg_print_memmap();
-bool mem_setup_pmm(MemoryMap* memMap);
+bool mem_setup_pmm(memorymap_t* memMap);
 void* mem_allocate_page();
 bool mem_free_page(void* address);
 

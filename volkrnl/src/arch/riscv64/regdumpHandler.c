@@ -10,7 +10,7 @@
 
 
 
-void arch_print_registers(RegisterState* state){
+void arch_print_registers(registerstate_t* state){
     rtl_print_hex("RA: ", state->ra, FALSE);
     rtl_print_hex("  SP: ", state->sp, TRUE);
     rtl_print_hex("GP: ", state->gp, FALSE);

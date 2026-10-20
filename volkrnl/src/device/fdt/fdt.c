@@ -8,8 +8,8 @@
 
 
 
-bool fdt_init(FdtInfo* info, uintptr_t address){
-    FdtHeader* initial = (FdtHeader*)address;
+bool fdt_init(fdtinfo_t* info, uintptr_t address){
+    fdtheader_t* initial = (fdtheader_t*)address;
     info->fdtAddress = address;
     info->header.magic = rtl_bswap32(initial->magic);
     if(info->header.magic != 0xd00dfeed){
@@ -31,7 +31,7 @@ bool fdt_init(FdtInfo* info, uintptr_t address){
 }
 
 
-const char* fdt_get_string(FdtInfo* info, uint32_t offset){
+const char* fdt_get_string(fdtinfo_t* info, uint32_t offset){
     if(offset >= info->header.dtStringSize){
         return "invalid";
     }
@@ -40,7 +40,7 @@ const char* fdt_get_string(FdtInfo* info, uint32_t offset){
     return string;
 }
 
-void fdt_print_all_strings(FdtInfo* info){
+void fdt_print_all_strings(fdtinfo_t* info){
     uintptr_t offset = 0;
     const char* style = "------------------------------------------------------------\n";
     rtl_print("\n");
@@ -62,7 +62,7 @@ void fdt_print_all_strings(FdtInfo* info){
 
 
 
-void fdt_print_node(FdtInfo* info, uint32_t offset){
+void fdt_print_node(fdtinfo_t* info, uint32_t offset){
     while(offset < info->cellAmount){
         uint32_t value = rtl_bswap32(info->cells[offset]);
         switch(value){
@@ -83,7 +83,7 @@ void fdt_print_node(FdtInfo* info, uint32_t offset){
             case FDT_PROP:{
                 rtl_print("\tFDT_PROP\n");
                 offset++;
-                FdtProp* prop = (FdtProp*)(info->cells + offset);
+                fdtprop_t* prop = (fdtprop_t*)(info->cells + offset);
                 rtl_printf("\t\t%s, %d, 0x%x\n",
                         fdt_get_string(info, rtl_bswap32(prop->nameOffset)),
                         rtl_bswap32(prop->length), rtl_bswap32(info->cells[offset + 2]));
@@ -100,7 +100,7 @@ void fdt_print_node(FdtInfo* info, uint32_t offset){
 
 // absoloutly horrendous code
 // its also very unsafe, TODO: make it safe!!!
-void fdt_print_node_and_step(FdtInfo* info, uint32_t* offset){
+void fdt_print_node_and_step(fdtinfo_t* info, uint32_t* offset){
     while(*offset < info->cellAmount){
         uint32_t value = rtl_bswap32(info->cells[*offset]);
         switch(value){
@@ -121,7 +121,7 @@ void fdt_print_node_and_step(FdtInfo* info, uint32_t* offset){
             case FDT_PROP:{
                 rtl_print("\tFDT_PROP\n");
                 *offset += 1;;
-                FdtProp* prop = (FdtProp*)(info->cells + *offset);
+                fdtprop_t* prop = (fdtprop_t*)(info->cells + *offset);
                 rtl_printf("\t\t%s, %d, 0x%x\n",
                         fdt_get_string(info, rtl_bswap32(prop->nameOffset)),
                         rtl_bswap32(prop->length), rtl_bswap32(info->cells[*offset + 2]));
@@ -138,7 +138,7 @@ void fdt_print_node_and_step(FdtInfo* info, uint32_t* offset){
 
 
 // its a mess and it doesn't even work, gotta fix it
-void fdt_dump(FdtInfo* info){
+void fdt_dump(fdtinfo_t* info){
     const char* style = "------------------------------------------------------------\n";
     rtl_print("\n");
     rtl_print(style);
@@ -152,7 +152,7 @@ void fdt_dump(FdtInfo* info){
     rtl_print("\n");
 }
 
-bool fdt_find_node(FdtInfo* info, const char* nodeName, uint32_t* nodeOffset){
+bool fdt_find_node(fdtinfo_t* info, const char* nodeName, uint32_t* nodeOffset){
     for(uint32_t i = 0; i < info->cellAmount; i++){
         if(rtl_bswap32(info->cells[i]) != FDT_BEGIN_NODE) continue;
         const char* name = (const char*)(info->cells + i + 1);
@@ -168,7 +168,7 @@ bool fdt_find_node(FdtInfo* info, const char* nodeName, uint32_t* nodeOffset){
     return FALSE;
 }
 
-FdtProp* fdt_get_prop_ex(FdtInfo* info, uint32_t nodeOffset, const char* propName, uint32_t* propOffset){
+fdtprop_t* fdt_get_prop_ex(fdtinfo_t* info, uint32_t nodeOffset, const char* propName, uint32_t* propOffset){
     uint32_t offset = nodeOffset;
     while(offset < info->cellAmount){
         uint32_t value = rtl_bswap32(info->cells[offset]);
@@ -186,7 +186,7 @@ FdtProp* fdt_get_prop_ex(FdtInfo* info, uint32_t nodeOffset, const char* propNam
             }
             case FDT_PROP:{
                 offset++;
-                FdtProp* prop = (FdtProp*)(info->cells + offset);
+                fdtprop_t* prop = (fdtprop_t*)(info->cells + offset);
                 const char* name = fdt_get_string(info, rtl_bswap32(prop->nameOffset));
                 if(rtl_equal_cstring(propName, name)){
                     *propOffset = offset;
@@ -205,17 +205,17 @@ FdtProp* fdt_get_prop_ex(FdtInfo* info, uint32_t nodeOffset, const char* propNam
     return NULL;
 }
 
-FdtProp* fdt_get_prop(FdtInfo* info, uint32_t nodeOffset, const char* propName){
+fdtprop_t* fdt_get_prop(fdtinfo_t* info, uint32_t nodeOffset, const char* propName){
     uint32_t pOffset = 0;
     return fdt_get_prop_ex(info, nodeOffset, propName, &pOffset);
 }
 
 
-uint32_t fdt_get_value_from_prop(FdtInfo* info, uint32_t propOffset){
+uint32_t fdt_get_value_from_prop(fdtinfo_t* info, uint32_t propOffset){
     return rtl_bswap32(info->cells[propOffset + 2]);
 }
 
-void fdt_get_array_from_prop(FdtInfo* info, uint32_t propOffset, uintptr_t* array, size_t length){
+void fdt_get_array_from_prop(fdtinfo_t* info, uint32_t propOffset, uintptr_t* array, size_t length){
     uint32_t offset = propOffset + 2;
     for(size_t i = 0; i < length; i++){
         array[i] = rtl_bswap32(info->cells[offset + i]);
@@ -223,6 +223,6 @@ void fdt_get_array_from_prop(FdtInfo* info, uint32_t propOffset, uintptr_t* arra
 }
 
 // doesn't work
-// const char* fdt_get_string_from_prop(FdtInfo* info, uint32_t propOffset){
+// const char* fdt_get_string_from_prop(fdtinfo_t* info, uint32_t propOffset){
 //     return fdt_get_string(info, rtl_bswap32(info->cells[propOffset + 2]));
 // }

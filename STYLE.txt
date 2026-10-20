@@ -1,0 +1,7 @@
+style rules:
+
+for functions we use snake_case and append the module name (example_func)
+for types we use no cases and append _t (exampletype_t)
+for struct and enum names we use no cases (examplestruct)
+for variables we use camelCase (exampleVariable)
+for enum values and defines we capitalize everything (EXAMPLE_DEFINE)

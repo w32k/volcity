@@ -12,7 +12,7 @@
 
 
 
-volatile typedef struct _UStarHeader {
+volatile typedef struct ustarheader {
     uint8_t fileName[100];
     uint64_t mode;
     uint64_t oUserId;
@@ -30,13 +30,13 @@ volatile typedef struct _UStarHeader {
     uint64_t devMinor;
     uint8_t fileNamePrefix[155];
     uint8_t padding[12];
-} __attribute__((packed)) UStarHeader;
+} __attribute__((packed)) ustarheader_t;
 
-UStarHeader* ustar_get_header(uintptr_t address, uintptr_t offset);
-size_t ustar_get_filesize_from_header(UStarHeader* header);
+ustarheader_t* ustar_get_header(uintptr_t address, uintptr_t offset);
+size_t ustar_get_filesize_from_header(ustarheader_t* header);
 void ustar_list_all_from_memory(uintptr_t address);
-UStarHeader* ustar_find_file_from_memory(uintptr_t address, const char* fileName);
-uint8_t* ustar_get_filedata_from_memory(UStarHeader* header);
+ustarheader_t* ustar_find_file_from_memory(uintptr_t address, const char* fileName);
+uint8_t* ustar_get_filedata_from_memory(ustarheader_t* header);
 
 
 

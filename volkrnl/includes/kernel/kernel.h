@@ -10,12 +10,12 @@
 #include <types.h>
 #include <memory/memory.h>
 
-typedef struct _InitRdInfo {
+typedef struct initrdinfo {
     uintptr_t base;
     size_t size;
-} InitRdInfo;
+} initrdinfo_t;
 
-void kern_entry(MemoryMap* memMap, InitRdInfo* info);
+void kern_entry(memorymap_t* memMap, initrdinfo_t* info);
 [[noreturn]] void kern_panic(const char* reason);
 void kern_parse_tar(uintptr_t* address);
 

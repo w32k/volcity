@@ -7,7 +7,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 // because the pagefreelist used in the pmm is
 // 16 bytes large on most 64bit systems and 8 bytes large on

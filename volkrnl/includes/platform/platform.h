@@ -4,7 +4,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 
 bool plat_uart_setup();

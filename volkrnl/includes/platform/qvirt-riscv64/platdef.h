@@ -5,7 +5,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 #define UART_BASE 0x10000000
 #define DEVTREE_BASE 0x80000000

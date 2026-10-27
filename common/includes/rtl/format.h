@@ -1,7 +1,7 @@
 #ifndef RTLFORMAT_H_INCLUDED
 #define RTLFORMAT_H_INCLUDED
 
-#include <types.h>
+#include <voldef.h>
 
 void rtl_print_dec(const char* prev, size_t dec, bool shouldNewline);
 void rtl_print_hex(const char* prev, size_t dec, bool shouldNewline);

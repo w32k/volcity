@@ -1,7 +1,7 @@
 #ifndef RTLMEM_H_INCLUDED
 #define RTLMEM_H_INCLUDED
 
-#include <types.h>
+#include <voldef.h>
 
 
 void* rtl_copy_mem(const void* src, void* dest, size_t len);

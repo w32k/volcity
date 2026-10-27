@@ -7,7 +7,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 #include <memory/memory.h>
 
 typedef struct initrdinfo {

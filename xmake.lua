@@ -1,5 +1,5 @@
 includes("volkrnl")
-includes("sdk/rtl")
+includes("common/rtl")
 
 option("varch")
     set_values("riscv64")
@@ -23,7 +23,3 @@ toolchain("clang-elf")
     set_toolset("as", "clang")
     set_toolset("ld", "ld.lld")
 toolchain_end()
-
-
-
-

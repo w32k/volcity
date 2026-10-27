@@ -6,7 +6,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 
 size_t rtl_get_cstring_len(const char* src);

@@ -4,7 +4,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 
 #define MTIMECMP_OFFSET 0x4000

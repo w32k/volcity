@@ -8,7 +8,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 #define DESC_FDT 0
 #define DESC_ACPI 1

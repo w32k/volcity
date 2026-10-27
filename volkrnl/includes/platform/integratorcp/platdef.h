@@ -5,7 +5,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 #define UART_BASE 0x16000000
 #define UART_FLAG_REGISTER 0x18

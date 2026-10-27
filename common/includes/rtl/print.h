@@ -6,7 +6,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 
 void rtl_print(const char* string);

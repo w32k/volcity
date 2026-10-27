@@ -7,7 +7,7 @@
 
 
 
-#include <types.h>
+#include <voldef.h>
 
 
 typedef struct registerstate registerstate_t;

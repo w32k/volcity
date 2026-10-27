@@ -1,5 +1,5 @@
-#ifndef TYPES_H_INCLUDED
-#define TYPES_H_INCLUDED
+#ifndef VOLDEF_H_INCLUDED
+#define VOLDEF_H_INCLUDED
 
 
 

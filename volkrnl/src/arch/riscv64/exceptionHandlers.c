@@ -1,7 +1,6 @@
 #include <kernel/kernel.h>
 #include <rtl/print.h>
 #include <arch/riscv64/archdef.h>
-#include <platform/platform.h>
 
 
 typedef void(*Callback)();

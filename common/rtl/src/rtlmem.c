@@ -1,5 +1,4 @@
 #include <rtl/mem.h>
-#include <rtl/print.h>
 // slower functions, will optimize later on
 
 void* rtl_copy_mem(const void* src, void* dest, size_t len){

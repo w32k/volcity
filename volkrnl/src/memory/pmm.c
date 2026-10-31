@@ -10,6 +10,9 @@ struct pagefreelist {
 static memorymap_t* memMap = NULL;
 static struct pagefreelist* head = NULL;
 static struct pagefreelist* tail = NULL;
+static size_t usedPages = 0;
+static size_t totalPages = 0;
+
 
 const char* memMapTypeToText[] = {
     [MEM_TYPE_USED] = "used",
@@ -19,6 +22,7 @@ const char* memMapTypeToText[] = {
 
 
 // TODO: add spinlocks to make it SMP-safe
+// it isn't SMP safe rn =(
 
 static inline void add_page_to_freelist(uintptr_t base){
     struct pagefreelist* page = (struct pagefreelist*)base;
@@ -77,7 +81,6 @@ void mem_dbg_print_memmap(){
 
 bool mem_setup_pmm(memorymap_t* memoryMap){
     memMap = memoryMap;
-    size_t amountOfPages = 0;
 
     // this is really really slow with more and more amounts of memory
     // i need to do this in a smarter way
@@ -90,18 +93,32 @@ bool mem_setup_pmm(memorymap_t* memoryMap){
             // but for now this will do!
             if(i + PAGE_SIZE > entry->size) break;
             add_page_to_freelist(entry->base + i);
-            amountOfPages++;
+            totalPages++;
         }
     }
-    DEBUG_INFO("amountOfPages: %d\n", amountOfPages);
+    DEBUG_INFO("totalPages: %d\n", totalPages);
     return TRUE;
 }
 
 void* mem_allocate_page(){
+    usedPages++;
     return get_page_from_freelist();
 }
 
 bool mem_free_page(void* address){
+    if(usedPages == 0){
+        DEBUG_WARNING("hey.... someones trying to free a page when theres none allocated!\n");
+        return FALSE;
+    }
+    usedPages--;
     add_page_to_freelist((uintptr_t)address);
     return TRUE;
+}
+
+size_t mem_return_used_pages(){
+    return usedPages;
+}
+
+size_t mem_return_total_pages(){
+    return totalPages;
 }

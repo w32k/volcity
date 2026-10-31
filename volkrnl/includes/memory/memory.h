@@ -41,5 +41,6 @@ void mem_dbg_print_memmap();
 bool mem_setup_pmm(memorymap_t* memMap);
 void* mem_allocate_page();
 bool mem_free_page(void* address);
-
+size_t mem_return_used_pages();
+size_t mem_return_total_pages();
 #endif

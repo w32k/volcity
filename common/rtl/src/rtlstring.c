@@ -1,7 +1,6 @@
 #include <rtl/string.h>
 #include <rtl/mem.h>
 #include <rtl/math.h>
-#include <rtl/print.h>
 
 size_t rtl_get_cstring_len(const char* src){
     size_t i = 0;

@@ -1,5 +1,4 @@
 #include <platform/platform.h>
-#include <rtl/print.h>
 #include <arch/riscv64/archdef.h>
 #include <kernel/kernel.h>
 

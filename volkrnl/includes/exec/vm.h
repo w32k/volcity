@@ -28,7 +28,12 @@ typedef enum vmreg {
 typedef struct vmmemlist {
     struct vmmemlist* next;
     struct vmmemlist* prev;
+    struct vmmemlist* nextThousand;
+    struct vmmemlist* prevThousand;
+    struct vmmemlist* nextMillion;
+    struct vmmemlist* prevMillion;
     size_t used;
+    size_t pageIndex;
     bool shouldDeleteIfEmpty;
 } vmmemlist_t;
 

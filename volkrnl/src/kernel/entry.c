@@ -27,10 +27,10 @@ void kern_entry(memorymap_t* memMap, initrdinfo_t* rdInfo){
     //     amount++;
     // }
     //DEBUG_INFO("amount of pages found: %ld\n", amount);
-    uint8_t data[8128] = {0};
-    rtl_set_mem(data, 'h', 8128);
+    uint8_t data[8048] = {0};
+    rtl_set_mem(data, 'h', 8048);
     vmproc_t proc = {0};
-    exec_init_proc_from_raw(data, 8128, &proc);
+    exec_init_proc_from_raw(data, 8048, &proc);
     vmmemlist_t* list = proc.memHead;
     while(list != NULL){
         char* data = (char*)((uintptr_t)list + sizeof(vmmemlist_t));
